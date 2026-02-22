@@ -4,10 +4,10 @@
 # Adapted from work by Anders Bjorholm Dahl
 
 # Folder where your data files are placed
-dirIn = 'C:/Users/anym/Downloads/data/'
+dirIn = '/Users/madshaakonsson/Desktop/5. Semester/mat-mod-opgaver/salami/data/'
 
 
-import helpFunctions as hf 
+from example_code import helpFunctions as hf 
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.pyplot import imread
@@ -48,24 +48,33 @@ plt.show()
 [meatPix, meatR, meatC] = hf.getPix(multiIm, annotationIm[:,:,2]);
 
 # Here we plot the mean values for pixels with meat and fat respectively
-plt.plot(np.mean(meatPix,0),'b')
-plt.plot(np.mean(fatPix,0),'r')
+plt.plot(np.mean(meatPix,0),'b', label="meat")
+plt.plot(np.mean(fatPix,0),'r', label="fat")
+plt.xticks(range(0,19), range(1,20))
+plt.legend()
 plt.show()
 
 
+# 0. is background 
+# 1. is fat
+# 2. is meat
 
 
 ## The function showHistogram makes a histogram that is returned as a vector
 
 # Here is an example - last argument tells the function to plot the histogram for meat and fat
-h = hf.showHistograms(multiIm, annotationIm[:,:,2:3], 2, 1)
+h = hf.showHistograms(multiIm, annotationIm[:,:,1:3], 2) #plotting for band 2 and plotting the historgram
+
 
 
 ## The histogram is also in h
 # But not truncated like in the plot. If we wnat to avoid plotting all 256 dimensions, 
 # we can do like below, and only plot the first 50 values
 
-plt.plot(h[0:50:,:])
+plt.hist(h[0:50:,:], bins=100, label=["fat", "meat"])
+plt.xlabel("Pixel value")
+plt.ylabel("Number of pixels")
+plt.legend(["fat", "meat"]) 
 plt.show()
 
 ## The function setImagePix produces a colour image
