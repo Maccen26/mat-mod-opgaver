@@ -53,7 +53,7 @@ function solveIP(H, K)
     
     
     # Adjacency constraint: no two adjacent positions can both have a station
-    @constraint(model, [i in 1:h-1], x[i] + x[i+1] <= 1) # Problem 5
+    #@constraint(model, [i in 1:h-1], x[i] + x[i+1] <= 1) # Problem 5
 
     # Objective: minimize sum of residuals
     # @objective(model, Min, sum(x)) # Problem 3 (should not be in the other problems)
