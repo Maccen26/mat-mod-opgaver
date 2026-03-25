@@ -5,7 +5,7 @@ function load_heights(path)
     values = Float64[]
     for raw in readlines(path)
         s = strip(raw)
-        if isempty(s) || s == "[" || s == "]"
+        if isempty(s)
             continue
         end
         push!(values, parse(Float64, s))
@@ -18,25 +18,6 @@ H = load_heights(joinpath(@__DIR__, "heights.txt"))
 
 # Define K
 K = [300.0, 140.0, 40.0]
-
-# function constructA(H,K)
-#     h = length(H)
-#     A = spzeros(h,h)
-#     for i in 1:h
-#         for j in 1:h
-#             if i == j
-#                 A[i,j] = K[1]
-#             elseif abs(i-j) == 1
-#                 A[i,j] = K[2]
-#             elseif abs(i-j) == 2
-#                 A[i,j] = K[3]
-#             else
-#                 A[i,j] = 0.0
-#             end
-#         end
-#     end
-#     return A
-# end
 
 function solveIP(H, K)
     h = length(H)
@@ -52,12 +33,14 @@ function solveIP(H, K)
     @variable(model, R[1:h] >= 0)
     
     
-    # Adjacency constraint: no two adjacent positions can both have a station
-    #@constraint(model, [i in 1:h-1], x[i] + x[i+1] <= 1) # Problem 5
+    # Objective: minimize number of nukes
+    # @objective(model, Min, sum(x)) # Experiment 1
+
+    # Adjacency constraint: no two adjacent positions can both have a nuke
+    #@constraint(model, [i in 1:h-1], x[i] + x[i+1] <= 1) # Experiment 2
 
     # Objective: minimize sum of residuals
-    # @objective(model, Min, sum(x)) # Problem 3 (should not be in the other problems)
-    @objective(model, Min, sum((R[i] - H[i] - CHD) for i in 1:h)) # Problem 4
+    @objective(model, Min, sum((R[i] - H[i] - CHD) for i in 1:h)) # Experiment 2
 
     # Coverage constraints
     for i in 1:h

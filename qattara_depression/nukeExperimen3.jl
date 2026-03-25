@@ -57,7 +57,6 @@ function solveIP(H, K_settings)
         @constraint(model, R[i] >= H[i] + CHD)
         
         # Coverage formula: R[i] = sum over neighbors j of (K_setting[k] for setting k of position j) * x[j,k]
-        # This requires understanding which setting each j uses
         coverage_expr = AffExpr()
         for j in l:r
             for k in 1:num_settings
